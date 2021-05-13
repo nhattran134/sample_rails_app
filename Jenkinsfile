@@ -1,4 +1,8 @@
 #!groovy
+@Library(['re-pipeline-library', 'crq-library@v1.1'])
+import com.manheim.releng.jenkins_pipeline_library.Utils
+
+def reutils = new Utils(steps)
 
 VARS = [
   groupId             : 'unknown',
