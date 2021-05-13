@@ -26,7 +26,7 @@ pipeline {
   }
 }
 
-def deploy_app_environment(String account, String env) {
+def deploy_app_environment() {
   stage("Deploy") {
 
     // Create Dockerrun.aws.json in the deploy dir
