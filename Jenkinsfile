@@ -1,10 +1,8 @@
 #!groovy
 // ---------------------- Begin Pipeline ----------------------
 node('EC2CloudAgent') {
-  stages {
     checkout()
     build_and_test()
-  }
 }
 
 // ---------------------- Begin Support Methods ----------------------
