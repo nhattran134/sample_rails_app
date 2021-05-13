@@ -17,6 +17,12 @@ pipeline {
         sh 'docker push 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:latest'
       }
     }
+    stage('EB Deploy')
+    {
+      steps {
+        deploy_app_environment()
+      }
+    }
   }
 }
 
