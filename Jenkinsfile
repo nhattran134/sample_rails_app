@@ -11,8 +11,8 @@ pipeline {
         apt-get install unzip
         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
         unzip awscliv2.zip
-        sudo ./aws/install
-        aws ecr get-login-password --region ap-southeast-1 | sudo docker login --username AWS --password-stdin 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com
+        ./aws/install
+        aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com
         """
         }
         echo 'Building...'
