@@ -5,10 +5,8 @@ pipeline {
   stages {
     stage('ECR') {
       steps {
-        withAWS(role:"arn:aws:iam::677700034553:role/EC2AdminInstanceRole", region:"ap-southeast-1") {
-        // AWS ECR login
+
         sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com'
-        }
         echo 'Building...'
         sh 'docker build -t rails-test-ecs .'
         sh 'docker tag rails-test-ecs:latest 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:latest'
