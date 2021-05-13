@@ -2,7 +2,7 @@
 // ---------------------- Begin Pipeline ----------------------
 node('EC2CloudAgent') {
     checkout()
-    build_and_test()
+    build_image()
 }
 
 // ---------------------- Begin Support Methods ----------------------
