@@ -4,13 +4,13 @@ application: sample-rails-app
 # common settings for all environments
 common:
   # Solution stack for elastic beanstalk, default is 64bit tomcat 7 for JAVA app
-  # solution_stack_name: 64bit Amazon Linux 2014.03 v1.0.3 running Tomcat 7 Java 7
+  solution_stack_name: 64bit Amazon Linux 2018.03 v2.25.1 running Multi-container Docker 19.03.13-ce (Generic)
 
   # Tier name for environments. Current supported values are WebServer and Worker
-  # tier: WebServer
+  tier: WebServer
 
   # AWS region to deploy. Default to us-east-1
-  # region: us-west-1
+  region: ap-southeast-1
 
   # There are three deployment strategies: 'blue-green', 'blue-only', or 'inplace-update'.
   # Blue green deployments keep two elastic beanstalk environments and always deploy to
@@ -22,7 +22,7 @@ common:
   # deploy. Inplace-update will save resources but will suffer from downtime.
   # (All old environments need be destroyed when you switching between strategies.)
   # Default strategy is 'blue-green'.
-  # strategy: blue-green
+  strategy: blue-green
 
   # Name of s3 bucket where uploaded application packages will be stored.
   # Note that the string ".packages" will be added as a suffix to your bucket.
@@ -36,7 +36,7 @@ common:
   # recreate it. This is useful to avoid configuration drift and
   # accumulating state on the ec2 instances. Default is off but we recommend
   # it to be turned on for production environment.
-  # phoenix_mode: off
+  phoenix_mode: on
 
   # The tags you would like to be associated with your resources.
   # These tags will only be used when you first launch an environment.  If you are using
@@ -50,7 +50,7 @@ common:
   # and deleted from the S3 source bucket as well. If specified as zero or not
   # specified, all versions will be kept.  If a version_prefix is given, only removes
   # version starting with the prefix.
-  # keep_latest: 200
+  keep_latest: 2
 
   # Specifies a prefix to prepend to the version label.
   # This can be useful if you want to use different binaries for different
@@ -157,3 +157,4 @@ environments:
       # - namespace: aws:autoscaling:asg
       #   option_name: MinSize
       #    value: "2"
+      
