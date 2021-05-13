@@ -27,7 +27,6 @@ pipeline {
 }
 
 def deploy_app_environment() {
-    sh "mkdir deploy"
     // Create Dockerrun.aws.json in the deploy dir
     dir('deploy') {
       writeFile file: 'Dockerrun.aws.json', text: getDockerrunFile(account)
