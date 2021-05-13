@@ -33,7 +33,7 @@ def deploy_app_environment(String account, String env) {
 
     echo "Deploying"
       withAWS(role: "arn:aws:iam::677700034553:role/EC2AdminInstanceRole", region:"ap-southeast-1") {
-        sh "bundle exec eb_deploy -p $${BUILD_NUMBER}.zip -e 'dev'"
+        sh "bundle exec eb_deploy -p ${BUILD_NUMBER}.zip -e 'dev'"
       }
   }
 }
