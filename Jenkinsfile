@@ -1,7 +1,8 @@
 #!groovy
 // ---------------------- Begin Pipeline ----------------------
-node('EC2CloudAgent') {
-  wraps {
+pipeline {
+  agent EC2CloudAgent
+  stages {
     checkout()
     build_and_test()
   }
