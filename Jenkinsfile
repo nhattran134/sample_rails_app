@@ -1,6 +1,6 @@
 #!groovy
 // ---------------------- Begin Pipeline ----------------------
-node('EC2CloudAgent') {
+node {
     checkout()
     build_image()
 }
