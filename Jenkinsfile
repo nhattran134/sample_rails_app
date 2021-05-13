@@ -1,86 +1,29 @@
 #!groovy
-@Library(['re-pipeline-library', 'crq-library@v1.1'])
-import com.manheim.releng.jenkins_pipeline_library.Utils
 
-def reutils = new Utils(steps)
-
-VARS = [
-  groupId             : 'unknown',
-  artifactId          : 'unknown',
-  version             : 'unknown',
-  build_version       : 'unknown',
-  commit_hash         : 'unknown',
-  app_name            : 'unknown',
-  team                : 'unknown',
-  owner_email         : 'unknown',
-  pipeline_repo       : 'http://gitlab/root/tappy_local',
-  portfolio           : 'unknown',
-  delivery_stream     : 'unknown',
-  release_train       : 'unknown',
-  component_id        : 'unknown',
-  workload            : 'unknown',
-  component           : 'unknown',
-  slack_channel       : 'unknown',
-  aws_region          : 'ap-southeast_1',
-  host_port           : '80',
-  container_port      : '8080',
-  container_mem       : '2048',
-  eb_instance_size    : 't3.medium',
-  solution_stack      : '64bit Amazon Linux 2018.03 v2.26.0 running Multi-container Docker 19.03.13-ce (Generic)'
-]
-
-ENVIRONMENTS = [
-  lowers: [
-    account_id       : '312182769717',
-    build_version    : 'unknown',
-    aws_role_arn     : 'arn:aws:iam::312182769717:role/acct-managed/awsappmannp-dealshield-deploy',
-    ecs_repo         : 'unknown',
-    s3_backend_bucket: 'unknown'
-  ]
-]
-
-// ---------------------- Begin Pipeline ----------------------
-node('kitchensink_apms') {
-  wraps {
-    checkout()
-    build_image()
-  }
-}
-
-// ---------------------- Begin Support Methods ----------------------
-def checkout() {
-  stage('Checkout') {
-    deleteDir()
-    configure_variables()
-  }
-}
-def configure_variables() {
-  ENVIRONMENTS.keySet().each() { account ->
-    ENVIRONMENTS[account].build_version = "${new Date().format( 'yyyyMMdd' )}-${VARS.commit_hash}"
-    ENVIRONMENTS[account].ecs_repo = "${ENVIRONMENTS[account].account_id}.dkr.ecr.${VARS.aws_region}.amazonaws.com"
-  }
-}
-
-def build_image() {
-    stage("Build image") {
-        withAWS(role:"${ENVIRONMENTS[account].aws_role_arn}", region:"${VARS.aws_region}") {
-      // AWS ECR login
-      sh """
-      aws --region ${VARS.aws_region} ecr get-login-password \
-      | docker login --username AWS --password-stdin ${ENVIRONMENTS[account].ecs_repo}
-      """
+pipeline {
+  agent any
+  stages {
+    stage('ECR') {
+      steps {
+        withAWS(role:"arn:aws:iam::677700034553:role/EC2AdminInstanceRole", region:"ap-southeast-1") {
+        // AWS ECR login
+        sh """
+        aws ecr get-login-password --region ap-southeast-1 \
+        | docker login --username AWS --password-stdin 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com
+        """
+        }
+        echo 'Building...'
+        sh 'docker build -t rails-test-ecs .'
+        sh 'docker tag rails-test-ecs:latest 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:latest'
+        sh 'docker push 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:latest'
+      }
     }
-    tag_prefix = "${ENVIRONMENTS[account].ecs_repo}/${item}-${account}"
-            sh """
-            docker build \
-            -t ${tag_prefix}:${ENVIRONMENTS[account].build_version} \
-            -f Dockerfile . \
-            --build-arg version=${MODULES[item].version}
+  }
+}
 
-              docker tag ${tag_prefix}:${ENVIRONMENTS[account].build_version} ${tag_prefix}:latest
-              docker push ${tag_prefix}:${ENVIRONMENTS[account].build_version}
-              docker push ${tag_prefix}:latest
-            """
-    }
-
+def deploy() {
+  def creds = readJSON file: './sts.json'
+  withEnv(['AWS_ACCESS_KEY_ID='+creds.AWS_ACCESS_KEY_ID, 'AWS_SECRET_ACCESS_KEY='+creds.AWS_SECRET_ACCESS_KEY, 'AWS_SESSION_TOKEN='+creds.AWS_SESSION_TOKEN]) {
+    sh "cd src/apps/orders && yarn deploy:$STAGE"
+  }
 }
