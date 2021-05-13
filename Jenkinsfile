@@ -36,7 +36,7 @@ ENVIRONMENTS = [
 ]
 
 // ---------------------- Begin Pipeline ----------------------
-node('kitchensink') {
+node('kitchensink_apms') {
   wraps {
     checkout()
     build_image()
