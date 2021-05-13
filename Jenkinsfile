@@ -27,7 +27,6 @@ pipeline {
 }
 
 def deploy_app_environment() {
-  stage("Deploy") {
     sh "mkdir deploy"
     // Create Dockerrun.aws.json in the deploy dir
     dir('deploy') {
@@ -41,12 +40,10 @@ def deploy_app_environment() {
       withAWS(role: "arn:aws:iam::677700034553:role/EC2AdminInstanceRole", region:"ap-southeast-1") {
         sh "bundle exec eb_deploy -p ${BUILD_NUMBER}.zip -e 'dev'"
       }
-  }
 }
-
 // Dockerrun.aws.json configurations for apps
 // Splunk container is leverage for monitoring and agent versions are controlled by the splunk-docker-image pipeline
-def getDockerrunFile(account) {
+def getDockerrunFile() {
   return """
   {
     "AWSEBDockerrunVersion": 2,
