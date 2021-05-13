@@ -9,7 +9,6 @@ node('EC2CloudAgent') {
 def checkout() {
   stage('Checkout') {
     deleteDir()
-    configure_variables()
   }
 }
 
