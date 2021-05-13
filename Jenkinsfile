@@ -18,7 +18,8 @@ def build_image() {
     withAWS(role:"arn:aws:iam::677700034553:role/EC2AdminInstanceRole", region:"ap-southeast-1") {
       // AWS ECR login
       sh """
-      docker login -p $(aws ecr get-login-password --region us-east-1) --username AWS 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com
+      aws --region ap-southeast-1 ecr get-login-password \
+      | sudo docker login --username AWS --password-stdin 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs/
       """
     }
     sh """
