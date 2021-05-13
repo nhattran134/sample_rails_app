@@ -5,8 +5,12 @@ pipeline {
   stages {
     stage('ECR') {
       steps {
-
-        sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com'
+        withAWS(role:"arn:aws:iam::677700034553:role/EC2AdminInstanceRole", region:"ap-southeast-1") {
+        // AWS ECR login
+        sh """
+        aws ecr get-login-password --region ap-southeast-1 | sudo docker login --username AWS --password-stdin 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com
+        """
+        }
         echo 'Building...'
         sh 'docker build -t rails-test-ecs .'
         sh 'docker tag rails-test-ecs:latest 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:latest'
@@ -16,9 +20,50 @@ pipeline {
   }
 }
 
-def deploy() {
-  def creds = readJSON file: './sts.json'
-  withEnv(['AWS_ACCESS_KEY_ID='+creds.AWS_ACCESS_KEY_ID, 'AWS_SECRET_ACCESS_KEY='+creds.AWS_SECRET_ACCESS_KEY, 'AWS_SESSION_TOKEN='+creds.AWS_SESSION_TOKEN]) {
-    sh "cd src/apps/orders && yarn deploy:$STAGE"
+def deploy_app_environment(String account, String env) {
+  stage("Deploy") {
+
+    // Create Dockerrun.aws.json in the deploy dir
+    dir('deploy') {
+      writeFile file: 'Dockerrun.aws.json', text: getDockerrunFile(account)
+    }
+    // Create zip package containing the contents of the docker run file 
+    sh "rm -f ${BUILD_NUMBER}.zip"
+    zip zipFile: "${BUILD_NUMBER}.zip", dir: 'deploy', archive: true
+
+    echo "Deploying"
+      withAWS(role: "arn:aws:iam::677700034553:role/EC2AdminInstanceRole", region:"ap-southeast-1") {
+        sh "bundle exec eb_deploy -p $${BUILD_NUMBER}.zip -e 'dev'"
+      }
   }
+}
+
+// Dockerrun.aws.json configurations for apps
+// Splunk container is leverage for monitoring and agent versions are controlled by the splunk-docker-image pipeline
+def getDockerrunFile(account) {
+  return """
+  {
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+      {
+        "name": "test",
+        "image": "677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:latest",
+        "essential": true,
+        "memory": 2048,
+        "portMappings": [
+          {
+            "hostPort": 80,
+            "containerPort": 3000
+          }
+        ],
+        "mountPoints": [
+          {
+            "sourceVolume": "awseb-logs-test",
+            "containerPath": "/app/log"
+          }
+        ]
+      }
+    ]
+  }
+  """
 }
