@@ -117,9 +117,6 @@ common:
       option_name: InstanceType
       value: t2.medium
       
-    - namespace: aws:elasticbeanstalk:application
-      option_name: Application Healthcheck URL
-      value: /actuator/health
     - namespace: aws:ec2:vpc
       option_name: Subnets
       value: subnet-03779d319761868ce,subnet-0bbc0c6ebc95d5fd2,subnet-044531ccf0d692371
