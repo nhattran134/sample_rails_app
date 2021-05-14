@@ -14,4 +14,5 @@ RUN yarn install --check-files
 COPY . /sample_rails_application
 EXPOSE 3000
 RUN rails db:migrate
+RUN rails db:environment:set RAILS_ENV=development
 #CMD ["rails", "server", "-b", "0.0.0.0"]
