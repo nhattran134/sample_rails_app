@@ -104,6 +104,9 @@ common:
     # - namespace: aws:autoscaling:launchconfiguration
     #   option_name: EC2KeyName
     #   value: <my-ec2-key-name>
+    - namespace: aws:autoscaling:launchconfiguration
+      option_name: IamInstanceProfile
+      value: EC2AdminInstanceRole
 
     # Following is an example which changes EC2 instance type
     # from t1.micro (default) to m1.small. Instances with t1.micro type sometime
