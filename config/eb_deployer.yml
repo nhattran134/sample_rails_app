@@ -116,8 +116,19 @@ common:
     - namespace: aws:autoscaling:launchconfiguration
       option_name: InstanceType
       value: t2.medium
-
-
+      
+    - namespace: aws:elasticbeanstalk:application
+      option_name: Application Healthcheck URL
+      value: /actuator/health
+    - namespace: aws:ec2:vpc
+      option_name: Subnets
+      value: subnet-03779d319761868ce,subnet-0bbc0c6ebc95d5fd2,subnet-044531ccf0d692371
+    - namespace: aws:ec2:vpc
+      option_name: ELBSubnets
+      value: vpc-3535c753,subnet-cc598e84,subnet-9b0391c2
+    - namespace: aws:ec2:vpc
+      option_name: VPCId
+      value: vpc-3535c753
   # If resources specified, eb_deployer will use the CloudFormation
   # template you provide to create a default CloudFormation stack with
   # name <application_name>-<env-name> for the environment current
