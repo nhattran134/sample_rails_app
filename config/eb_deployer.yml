@@ -115,7 +115,7 @@ common:
     # go back to t1.micro.
     - namespace: aws:autoscaling:launchconfiguration
       option_name: InstanceType
-      value: t2.micro
+      value: t2.medium
 
 
   # If resources specified, eb_deployer will use the CloudFormation
