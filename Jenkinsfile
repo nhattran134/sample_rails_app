@@ -13,13 +13,18 @@ pipeline {
         }
         echo 'Building...'
         sh 'docker build -t rails-test-ecs .'
+        sh 'docker tag rails-test-ecs:latest 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:${BUILD_NUMBER}'
         sh 'docker tag rails-test-ecs:latest 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:latest'
         sh 'docker push 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:latest'
+        sh 'docker push 677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:${BUILD_NUMBER}'
       }
     }
     stage('EB Deploy')
     {
       steps {
+        agent{
+          docker image '677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:${BUILD_NUMBER}'
+        }
         deploy_app_environment()
       }
     }
