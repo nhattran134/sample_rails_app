@@ -29,7 +29,7 @@ pipeline {
 def deploy_app_environment() {
     // Create Dockerrun.aws.json in the deploy dir
     dir('deploy') {
-      writeFile file: 'Dockerrun.aws.json', text: getDockerrunFile(account)
+      writeFile file: 'Dockerrun.aws.json', text: getDockerrunFile()
     }
     // Create zip package containing the contents of the docker run file 
     sh "rm -f ${BUILD_NUMBER}.zip"
