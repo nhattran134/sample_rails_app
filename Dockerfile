@@ -14,4 +14,4 @@ RUN yarn install --check-files
 COPY . /sample_rails_application
 EXPOSE 3000
 
-#CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["rails", "server", "-b", "0.0.0.0"]
