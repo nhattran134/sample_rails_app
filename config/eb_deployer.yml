@@ -125,7 +125,7 @@ common:
       value: subnet-03779d319761868ce,subnet-0bbc0c6ebc95d5fd2,subnet-044531ccf0d692371
     - namespace: aws:ec2:vpc
       option_name: ELBSubnets
-      value: vpc-3535c753,subnet-cc598e84,subnet-9b0391c2
+      value: subnet-e1c16787,subnet-cc598e84,subnet-9b0391c2
     - namespace: aws:ec2:vpc
       option_name: VPCId
       value: vpc-3535c753
