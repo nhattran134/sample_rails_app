@@ -22,7 +22,9 @@ pipeline {
     stage('EB Deploy')
     {
       agent{
-          docker image '677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:${BUILD_NUMBER}'
+          docker{
+            image '677700034553.dkr.ecr.ap-southeast-1.amazonaws.com/rails-test-ecs:${BUILD_NUMBER}'
+          }
         }
       steps {
         deploy_app_environment()
