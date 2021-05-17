@@ -124,6 +124,28 @@ common:
     - namespace: aws:ec2:vpc
       option_name: VPCId
       value: vpc-3535c753
+    
+    - namespace: aws:elasticbeanstalk:environment:process:default
+      option_name: HealthCheckPath
+      value: /health
+    - namespace: aws:autoscaling:asg
+      option_name: MinSize
+      value: '1'
+    - namespace: aws:autoscaling:asg
+      option_name: MaxSize
+      value: '2'
+    - namespace: aws:autoscaling:updatepolicy:rollingupdate
+      option_name: RollingUpdateType
+      value: Health
+    - namespace: aws:autoscaling:updatepolicy:rollingupdate
+      option_name: RollingUpdateEnabled
+      value: "true"
+    - namespace: aws:elb:policies
+      option_name: ConnectionDrainingEnabled
+      value: "true"
+    - namespace: aws:elb:policies
+      option_name: ConnectionDrainingTimeout
+      value: "30"
   # If resources specified, eb_deployer will use the CloudFormation
   # template you provide to create a default CloudFormation stack with
   # name <application_name>-<env-name> for the environment current
