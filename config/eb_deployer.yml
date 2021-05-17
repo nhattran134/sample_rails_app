@@ -115,9 +115,9 @@ common:
     - namespace: aws:elasticbeanstalk:application
       option_name: Application Healthcheck URL
       value: /actuator/health
-    #- namespace: aws:autoscaling:launchconfiguration
-    #  option_name: InstanceType
-    #  value: t2.medium
+    - namespace: aws:autoscaling:launchconfiguration
+      option_name: InstanceType
+      value: t2.medium
     #- namespace: aws:ec2:vpc
     #  option_name: Subnets
     #  value: subnet-03779d319761868ce
