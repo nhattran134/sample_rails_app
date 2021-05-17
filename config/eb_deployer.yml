@@ -112,21 +112,21 @@ common:
     # are not very responsible, so m1.small is suggested for saving time.
     # But if you care about the marginal cost difference you can comment this out to
     # go back to t1.micro.
-    - namespace: aws:elasticbeanstalk:application
-      option_name: Application Healthcheck URL
-      value: /actuator/health
-    - namespace: aws:autoscaling:launchconfiguration
-      option_name: InstanceType
-      value: t2.medium
-    - namespace: aws:ec2:vpc
-      option_name: Subnets
-      value: subnet-03779d319761868ce
-    - namespace: aws:ec2:vpc
-      option_name: ELBSubnets
-      value: subnet-cc598e84
-    - namespace: aws:ec2:vpc
-      option_name: VPCId
-      value: vpc-3535c753
+    #- namespace: aws:elasticbeanstalk:application
+    #  option_name: Application Healthcheck URL
+    #  value: /actuator/health
+    #- namespace: aws:autoscaling:launchconfiguration
+    #  option_name: InstanceType
+    #  value: t2.medium
+    #- namespace: aws:ec2:vpc
+    #  option_name: Subnets
+    #  value: subnet-03779d319761868ce
+    #- namespace: aws:ec2:vpc
+    #  option_name: ELBSubnets
+    #  value: subnet-cc598e84
+    #- namespace: aws:ec2:vpc
+    #  option_name: VPCId
+    #  value: vpc-3535c753
   # If resources specified, eb_deployer will use the CloudFormation
   # template you provide to create a default CloudFormation stack with
   # name <application_name>-<env-name> for the environment current
