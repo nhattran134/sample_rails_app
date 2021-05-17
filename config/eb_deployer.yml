@@ -76,7 +76,7 @@ common:
   # Defining a smoke test is highly recommended for serious usage. By default we use
   # The simplest one that just be checking server landing page using curl, e.g.
   smoke_test: |
-    curl_http_code = "curl -k -s -o /dev/null -w \"%{http_code}\" https://#{host_name}/"
+    curl_http_code = "curl -k -s -o /dev/null -w \"%{http_code}\" https://#{host_name}"
     Timeout.timeout(1200) do
       until ['200', '301', '302'].include?(`#{curl_http_code}`.strip)
         sleep 5
