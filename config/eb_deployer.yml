@@ -76,13 +76,12 @@ common:
   # Defining a smoke test is highly recommended for serious usage. By default we use
   # The simplest one that just be checking server landing page using curl, e.g.
   smoke_test: |
-    curl_http_code = "curl -s -o /dev/null -w \"%{http_code}\" http://#{host_name}"
-    Timeout.timeout(600) do
+    curl_http_code = "curl -k -s -o /dev/null -w \"%{http_code}\" https://#{host_name}/actuator/health"
+    Timeout.timeout(1200) do
       until ['200', '301', '302'].include?(`#{curl_http_code}`.strip)
         sleep 5
       end
     end
-
   # List of Elastic Beanstalk health states that will be considered healthy when deploying.
   # You may want to override default 'Green' with that list, if for example you are using
   # Elastic Beanstalk worker tier and you don't want eb_deployer to fail if you have messages
