@@ -135,9 +135,6 @@ common:
       option_name: MaxSize
       value: '2'
     - namespace: aws:autoscaling:updatepolicy:rollingupdate
-      option_name: RollingUpdateType
-      value: Health
-    - namespace: aws:autoscaling:updatepolicy:rollingupdate
       option_name: RollingUpdateEnabled
       value: "true"
     - namespace: aws:elb:policies
