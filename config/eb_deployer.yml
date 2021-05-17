@@ -112,9 +112,9 @@ common:
     # are not very responsible, so m1.small is suggested for saving time.
     # But if you care about the marginal cost difference you can comment this out to
     # go back to t1.micro.
-    #- namespace: aws:elasticbeanstalk:application
-    #  option_name: Application Healthcheck URL
-    #  value: /actuator/health
+    - namespace: aws:elasticbeanstalk:application
+      option_name: Application Healthcheck URL
+      value: /actuator/health
     #- namespace: aws:autoscaling:launchconfiguration
     #  option_name: InstanceType
     #  value: t2.medium
